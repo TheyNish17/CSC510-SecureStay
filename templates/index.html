@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SecureStay - Reception Desk</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <header>
+        <div class="logo">SecureStay</div>
+        <div class="subtitle">IT System Management Portal | CSC510</div>
+    </header>
+
+    <main class="dashboard">
+        <section class="panel system-state">
+            <h2>Live Room Grid (Set R)</h2>
+            <p class="description">Representing rooms $R$, locations $Loc: R \rightarrow F$, and current availability status $A = R - O$.</p>
+            <div class="grid">
+                {% for room in rooms %}
+                <div class="room-card {% if room.is_occupied %}occupied{% else %}vacant{% endif %}">
+                    <div class="room-header">
+                        <span class="room-id">Room {{ room.id }}</span>
+                        <span class="room-floor">Floor {{ room.floor }}</span>
+                    </div>
+                    <div class="room-body">
+                        <span class="room-type-badge">{{ room.type }}</span>
+                        <span class="status-indicator">
+                            {% if room.is_occupied %}Occupied{% else %}Vacant{% endif %}
+                        </span>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+
+        <section class="panel booking-action">
+            <h2>Process New Booking</h2>
+            <p class="description">Evaluates logic constraint formula: $Z = P \land V \land R \land T$</p>
+            
+            <form id="bookingForm">
+                <div class="form-group">
+                    <label for="guest_name">Guest Full Name</label>
+                    <input type="text" id="guest_name" name="guest_name" placeholder="E.g., Adam Harris" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="room_type">Required Room Type (ReqType)</label>
+                    <select id="room_type" name="room_type" required>
+                        {% for type in room_types %}
+                        <option value="{{ type }}">{{ type }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="checkbox-group">
+                    <label class="switch-container">
+                        <input type="checkbox" id="has_id" name="has_id" value="true">
+                        <span class="slider"></span>
+                        <span class="label-text">Verify Guest ID (P)</span>
+                    </label>
+                </div>
+
+                <div class="checkbox-group">
+                    <label class="switch-container">
+                        <input type="checkbox" id="payment_verified" name="payment_verified" value="true">
+                        <span class="slider"></span>
+                        <span class="label-text">Confirm Upfront Payment (V)</span>
+                    </label>
+                </div>
+
+                <button type="submit" class="btn-submit">Evaluate & Process Booking</button>
+            </form>
+
+            <div id="bookingResult" class="result-box hidden">
+                <h3 id="resultStatus"></h3>
+                <p id="resultMessage"></p>
+                <div id="assignmentDetails" class="hidden">
+                    <hr>
+                    <p><strong>Assigned Room:</strong> <span id="assignedRoom"></span></p>
+                    <p><strong>Floor Location:</strong> <span id="assignedFloor"></span></p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="/static/script.js"></script>
+</body>
+</html>
