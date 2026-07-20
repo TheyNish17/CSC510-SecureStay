@@ -116,7 +116,7 @@
     <main class="dashboard">
         <section class="panel system-state">
             <h2>Live Room Grid (Set R)</h2>
-            <p class="description">Representing rooms $R$, locations $Loc: R \rightarrow F$, and current availability status $A = R - O$.</p>
+            <p class="description">Representing rooms <code class="math-formula">R</code>, locations <code class="math-formula">Loc: R → F</code>, and current availability status <code class="math-formula">A = R - O</code></p>
             <div class="grid">
                 {% for floor, floor_rooms in hotel_rooms.items() %}
                     {% for room in floor_rooms %}
@@ -139,7 +139,7 @@
 
         <section class="panel booking-action">
             <h2>Process New Booking</h2>
-            <p class="description">Evaluates logic constraint formula: $Z = P \land V \land R \land T$</p>
+            <p class="description">Evaluates logic constraint formula: <code class="math-formula">Z ↔ (P ∧ V ∧ R ∧ T)</code></p>
             
             <form id="bookingForm">
                 <div class="form-group">
