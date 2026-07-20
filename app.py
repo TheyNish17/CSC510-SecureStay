@@ -1,13 +1,16 @@
 # app.py
-
+import os
 from fastapi import FastAPI, Request, Form
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
+# 1. REMOVED THE OLD SYNCHRONIZATION IMPORTS HERE
 from models import BookingRequest, RoomType
-from booking import find_available_room, update_room_occupancy, get_all_rooms
 from logic import verify_booking_logic
+
+# 2. IMPORT BOTH THE READ AND WRITE UTILITIES FROM YOUR INVENTORY CORNERSTONE
+from inventory import calculate_metrics, reserve_room
 
 app = FastAPI(title="SecureStay Reception")
 
@@ -15,19 +18,36 @@ app = FastAPI(title="SecureStay Reception")
 templates = Jinja2Templates(directory="templates")
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
-# app.py
+@app.post("/reset-inventory")
+async def reset_inventory():
+    """Deletes the current JSON database file to wipe all bookings."""
+    DB_FILE = "room_inventory.json"
+    if os.path.exists(DB_FILE):
+        os.remove(DB_FILE)
+    
+    # Re-run metrics to automatically rebuild a fresh copy of the initial layout
+    calculate_metrics()
+    
+    return {"status": "SUCCESS", "message": "Hotel layout reset back to default!"}
 
 @app.get("/", response_class=HTMLResponse)
 async def index(request: Request):
     """Renders the Receptionist Dashboard showing live room statuses."""
-    # We create a clean context variables dictionary explicitly 
+    
+    # Fetch our newly calculated live JSON stats (re-reads your room_inventory.json every refresh!)
+    stats = calculate_metrics()
+    
     context = {
         "request": request, 
-        "rooms": get_all_rooms(),
-        "room_types": [e.value for e in RoomType]
+        "hotel_rooms": stats["hotel_rooms"],
+        "room_types": [e.value for e in RoomType],
+        "global_stats": stats["global"],         
+        "type_stats": stats["by_type"],         
+        "floor_stats": stats["by_floor"]        
     }
     
     return templates.TemplateResponse(request=request, name="index.html", context=context)
+
 
 @app.post("/book")
 async def process_booking(
@@ -45,29 +65,24 @@ async def process_booking(
         payment_verified=payment_verified
     )
     
-    # 2. Compute available rooms (A = R - O)
-    target_room = find_available_room(req.room_type)
+    # 2. Check logic safety criteria up-front (P and V constraints)
+    if not has_id: 
+        return {"status": "DENIED", "message": "Booking Denied: Guest Identity Unverified (P failed)"}
+    if not payment_verified: 
+        return {"status": "DENIED", "message": "Booking Denied: Payment Processing Failed (V failed)"}
+        
+    # 3. Process the reservation directly inside your real JSON-backed database file
+    result = reserve_room(room_type.value)
     
-    # 3. Evaluate safety logic (Z = P ∧ V ∧ R ∧ T)
-    booking_approved = verify_booking_logic(req, target_room)
-    
-    if booking_approved and target_room:
-        # Commit Book: G -> R mapping by locking the room
-        update_room_occupancy(target_room.id, status=True)
+    if result["success"]:
         return {
             "status": "APPROVED",
             "message": f"Booking successful for {guest_name}!",
-            "room_id": target_room.id,
-            "floor": target_room.floor
+            "room_id": result["room_id"],
+            "floor": result["floor"]
         }
     else:
-        # Diagnosing the logical failure
-        reason = "Unknown error"
-        if not has_id: reason = "Guest Identity Unverified (P failed)"
-        elif not payment_verified: reason = "Payment Processing Failed (V failed)"
-        elif not target_room: reason = f"No vacant rooms available for type: {room_type.value} (A empty)"
-        
         return {
             "status": "DENIED",
-            "message": f"Booking Denied: {reason}"
+            "message": f"Booking Denied: {result['error']} (A empty)"
         }

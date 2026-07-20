@@ -12,24 +12,127 @@
         <div class="subtitle">IT System Management Portal | CSC510</div>
     </header>
 
+    <!-- Formal Mathematical Specifications -->
+    <section class="math-specs-container">
+        <div class="math-card">
+            <h2>1. Set Theory Formulations</h2>
+            <ul class="math-list">
+                <li>Let <strong>R</strong> be the set of all hotel rooms</li>
+                <li>Let <strong>F</strong> be the set of all hotel floors</li>
+                <li>Let <strong>O ⊆ R</strong> be the set of occupied rooms</li>
+                <li>Let <strong>A = R - O</strong> be the set of available rooms</li>
+                <li>Let <strong>BR ⊆ R</strong> be the set of balcony rooms</li>
+                <li>Let <strong>SR ⊆ BR</strong> be the set of suite rooms (all suites are balcony rooms)</li>
+                <li>Let <strong>FR ⊆ R</strong> be the set of family rooms</li>
+                <li>Functional Mappings: <code class="math-inline">Loc : R → F</code> and <code class="math-inline">Book : G → R</code></li>
+            </ul>
+        </div>
+
+        <div class="math-card">
+            <h2>2. Propositional Logic States</h2>
+            <table class="math-table">
+                <thead>
+                    <tr>
+                        <th>Var</th>
+                        <th>Proposition / Derived From</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>P</strong></td>
+                        <td>Guest identity is verified</td>
+                    </tr>
+                    <tr>
+                        <td><strong>V</strong></td>
+                        <td>Book(g) ∈ A (Assigned room is currently vacant)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>R</strong></td>
+                        <td>Requested room satisfies type requirements (FR / BR / SR)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>T</strong></td>
+                        <td>payment(g) = success (Payment transaction cleared)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Z</strong></td>
+                        <td>Booking approved and room committed</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="math-card">
+            <h2>3. Logical Truth Rules</h2>
+            <div class="rules-box">
+                <div class="rule-item">
+                    <span class="rule-label">Identity Verification:</span>
+                    <code class="math-formula">¬P → ¬Z</code>
+                </div>
+                <div class="rule-item">
+                    <span class="rule-label">Room Availability:</span>
+                    <code class="math-formula">¬V → ¬Z</code>
+                </div>
+                <div class="rule-item">
+                    <span class="rule-label">Payment Processing:</span>
+                    <code class="math-formula">¬T → ¬Z</code>
+                </div>
+                <div class="rule-item global-rule">
+                    <span class="rule-label">Final Approval Condition:</span>
+                    <code class="math-formula">Z ↔ (P ∧ V ∧ R ∧ T)</code>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--Live Dynamic Aggregate Dashboard -->
+     <button id="btnReset" class="btn-reset" type="button">Reset All Rooms</button>
+     
+    <section class="live-metrics-banner">
+        <div class="metric-card global">
+            <h3>System Occupancy</h3>
+            <div class="metric-value">{{ global_stats.occupied }} / {{ global_stats.total }}</div>
+            <div class="metric-sub text-muted">Global Rate: {{ global_stats.rate_percent }}%</div>
+        </div>
+
+        <div class="metric-card breakdown">
+            <h3>Inventory by Type</h3>
+            <div class="metric-list">
+                <div>Family: <strong>{{ type_stats['Family'].occupied|default(0) }}/{{ type_stats['Family'].total|default(0) }}</strong></div>
+                <div>Balcony: <strong>{{ type_stats['Balcony'].occupied|default(0) }}/{{ type_stats['Balcony'].total|default(0) }}</strong></div>
+                <div>Suite: <strong>{{ type_stats['Suite'].occupied|default(0) }}/{{ type_stats['Suite'].total|default(0) }}</strong></div>
+            </div>
+        </div>
+
+        <div class="metric-card floors">
+            <h3>Capacity by Level ($Loc$)</h3>
+            <div class="metric-list">
+                <div>Floor 1 Availability: <strong>{{ floor_stats[1].available|default(0) }} vacant</strong></div>
+                <div>Floor 2 Availability: <strong>{{ floor_stats[2].available|default(0) }} vacant</strong></div>
+                <div>Floor 3 Availability: <strong>{{ floor_stats[3].available|default(0) }} vacant</strong></div>
+            </div>
+        </div>
+    </section>
+
     <main class="dashboard">
         <section class="panel system-state">
             <h2>Live Room Grid (Set R)</h2>
             <p class="description">Representing rooms $R$, locations $Loc: R \rightarrow F$, and current availability status $A = R - O$.</p>
             <div class="grid">
-                {% for room in rooms %}
-                <div class="room-card {% if room.is_occupied %}occupied{% else %}vacant{% endif %}">
-                    <div class="room-header">
-                        <span class="room-id">Room {{ room.id }}</span>
-                        <span class="room-floor">Floor {{ room.floor }}</span>
+                {% for floor, floor_rooms in hotel_rooms.items() %}
+                    {% for room in floor_rooms %}
+                    <div class="room-card {% if room.is_occupied %}occupied{% else %}vacant{% endif %}">
+                        <div class="room-header">
+                            <span class="room-id">Room {{ room.id }}</span>
+                            <span class="room-floor">Floor {{ floor }}</span>
+                        </div>
+                        <div class="room-body">
+                            <span class="room-type-badge">{{ room.type }}</span>
+                            <span class="status-indicator">
+                                {% if room.is_occupied %}Occupied{% else %}Vacant{% endif %}
+                            </span>
+                        </div>
                     </div>
-                    <div class="room-body">
-                        <span class="room-type-badge">{{ room.type }}</span>
-                        <span class="status-indicator">
-                            {% if room.is_occupied %}Occupied{% else %}Vacant{% endif %}
-                        </span>
-                    </div>
-                </div>
+                    {% endfor %}
                 {% endfor %}
             </div>
         </section>

@@ -158,7 +158,6 @@ input[type="text"], select {
     background-color: #2563eb;
 }
 
-/* Feedback message box */
 .result-box {
     margin-top: 1.5rem;
     padding: 1.25rem;
@@ -178,4 +177,197 @@ input[type="text"], select {
 
 .hidden {
     display: none !important;
+}
+
+.live-metrics-banner {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    max-width: 1400px;
+    margin: 2rem auto 0 auto;
+    padding: 0 1rem;
+    box-sizing: border-box;
+}
+
+.metric-card {
+    background-color: var(--bg-secondary);
+    border-radius: 12px;
+    padding: 1.5rem;
+    border: 1px solid #334155;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.metric-card h3 {
+    margin: 0 0 0.75rem 0;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.metric-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-main);
+    margin-bottom: 0.25rem;
+}
+
+.metric-sub {
+    font-size: 0.85rem;
+}
+
+.metric-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.metric-list div {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.95rem;
+    border-bottom: 1px solid rgba(51, 65, 85, 0.5);
+    padding-bottom: 0.25rem;
+}
+
+.metric-list div:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.metric-list strong {
+    color: var(--accent);
+}
+
+.metric-card.floors .metric-list strong {
+    color: var(--success);
+}
+
+.btn-reset {
+    display: block;             
+    margin: 1.5rem auto;        
+    background-color: var(--danger); 
+    color: white;
+    padding: 0.6rem 1.5rem;     
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;           
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.btn-reset:hover {
+    background-color: #b91c1c;  
+    border-color: #b91c1c;
+    transform: scale(1.02);    
+}
+
+/* Formal Mathematical Specifications Panel Layout */
+.math-specs-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1.5rem;
+    max-width: 1400px;
+    margin: 2rem auto 0 auto;
+    padding: 0 1rem;
+    box-sizing: border-box;
+}
+
+.math-card {
+    background-color: var(--bg-secondary);
+    border-radius: 12px;
+    padding: 1.5rem;
+    border: 1px solid #334155;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.math-card h2 {
+    margin: 0 0 1rem 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--accent);
+    border-bottom: 1px solid #334155;
+    padding-bottom: 0.5rem;
+}
+
+/* Set Theory List */
+.math-list {
+    margin: 0;
+    padding-left: 1.2rem;
+    color: var(--text-main);
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+
+.math-list li {
+    margin-bottom: 0.4rem;
+}
+
+/* Propositional Logic Table */
+.math-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+}
+
+.math-table th, .math-table td {
+    text-align: left;
+    padding: 0.5rem;
+    border-bottom: 1px solid rgba(51, 65, 85, 0.5);
+}
+
+.math-table th {
+    color: var(--text-muted);
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+}
+
+.math-table td strong {
+    color: var(--accent);
+}
+
+/* Logical Rules */
+.rules-box {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.rule-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.9rem;
+    background: rgba(15, 23, 42, 0.3);
+    padding: 0.4rem 0.75rem;
+    border-radius: 6px;
+    border: 1px solid rgba(51, 65, 85, 0.3);
+}
+
+.rule-label {
+    color: var(--text-muted);
+}
+
+.global-rule {
+    border-color: var(--accent);
+    background: rgba(59, 130, 246, 0.1);
+}
+
+/* Monospace Typographic Elements for Operators */
+.math-inline, .math-formula {
+    font-family: 'Courier New', Courier, monospace;
+    background: rgba(0, 0, 0, 0.2);
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+    font-weight: bold;
+}
+
+.math-formula {
+    color: var(--success);
+}
+
+.global-rule .math-formula {
+    color: #60a5fa;
+    font-size: 0.95rem;
 }

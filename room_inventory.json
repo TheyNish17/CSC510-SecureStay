@@ -1,0 +1,73 @@
+{
+    "1": [
+        {
+            "id": 101,
+            "type": "Family",
+            "is_occupied": true
+        },
+        {
+            "id": 102,
+            "type": "Family",
+            "is_occupied": false
+        },
+        {
+            "id": 104,
+            "type": "Family",
+            "is_occupied": false
+        },
+        {
+            "id": 105,
+            "type": "Family",
+            "is_occupied": false
+        },
+        {
+            "id": 106,
+            "type": "Family",
+            "is_occupied": false
+        }
+    ],
+    "2": [
+        {
+            "id": 201,
+            "type": "Balcony",
+            "is_occupied": false
+        },
+        {
+            "id": 202,
+            "type": "Balcony",
+            "is_occupied": false
+        },
+        {
+            "id": 203,
+            "type": "Balcony",
+            "is_occupied": false
+        },
+        {
+            "id": 204,
+            "type": "Balcony",
+            "is_occupied": false
+        },
+        {
+            "id": 205,
+            "type": "Balcony",
+            "is_occupied": false
+        },
+        {
+            "id": 206,
+            "type": "Suite",
+            "is_occupied": true
+        }
+    ],
+    "3": [
+        {
+            "id": 301,
+            "type": "Suite",
+            "is_occupied": false
+        },
+        {
+            "id": 302,
+            "type": "Suite",
+            "is_occupied": false
+        }
+    ]
+}
