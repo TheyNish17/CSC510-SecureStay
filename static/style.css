@@ -354,7 +354,6 @@ input[type="text"], select {
     background: rgba(59, 130, 246, 0.1);
 }
 
-/* Monospace Typographic Elements for Operators */
 .math-inline, .math-formula {
     font-family: 'Courier New', Courier, monospace;
     background: rgba(0, 0, 0, 0.2);
@@ -370,4 +369,61 @@ input[type="text"], select {
 .global-rule .math-formula {
     color: #60a5fa;
     font-size: 0.95rem;
+}
+
+footer {
+    width: 100%;
+    max-width: 1400px;
+    margin: 4rem auto 0 auto;
+    padding: 2rem 1rem;
+    border-top: 1px solid #334155;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    box-sizing: border-box;
+}
+
+.footer-course {
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+/* Team Roster Grid Layout */
+.footer-team {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.footer-team li {
+    font-size: 0.85rem;
+    color: var(--text-muted, #94a3b8);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.student-id {
+    font-family: 'Courier New', Courier, monospace;
+    background-color: rgba(15, 23, 42, 0.6);
+    color: var(--text-main, #f8fafc);
+    padding: 0.15rem 0.4rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    border: 1px solid rgba(71, 85, 105, 0.4);
+}
+
+@media (max-width: 640px) {
+    .footer-team li {
+        flex-direction: column;
+        gap: 0.25rem;
+        text-align: center;
+        margin-bottom: 0.5rem;
+    }
 }
